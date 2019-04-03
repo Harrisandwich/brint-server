@@ -1,4 +1,4 @@
-import { PLAYER_PLAYING } from '../../constants/states'
+import { USER_PLAYING } from '../../constants/states'
 
 
 const getDisplayName = user => user.displayName
@@ -9,7 +9,7 @@ const message = ({ payload, io, user }) => {
   const roomCode = user.room
   const displayName = getDisplayName(user)
 
-  if (user.state === PLAYER_PLAYING) {
+  if (user.state === USER_PLAYING) {
     io.to(roomCode).emit('message', {
       output: message,
       displayName,

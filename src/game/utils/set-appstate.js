@@ -1,8 +1,8 @@
 import {
-  PLAYER_PLAYING,
-  PLAYER_WAITING,
-  PLAYER_GAME_OVER,
-  PLAYER_IN_MENU,
+  USER_PLAYING,
+  USER_WAITING,
+  USER_GAME_OVER,
+  USER_IN_MENU,
 } from '../constants/states'
 
 
@@ -11,16 +11,16 @@ export default (state, socket, io, props) => {
   user.state = state
   let prompt = 'Main Menu: '
   switch (state) {
-    case PLAYER_IN_MENU:
+    case USER_IN_MENU:
       prompt = 'Main Menu: '
       break
-    case PLAYER_WAITING:
+    case USER_WAITING:
       prompt = `${props.displayName}-${props.roomCode}: `
       break
-    case PLAYER_PLAYING:
+    case USER_PLAYING:
       prompt = `${props.displayName}-${props.roomCode}: `
       break
-    case PLAYER_GAME_OVER:
+    case USER_GAME_OVER:
       prompt = 'GAME OVER'
       break
     default:

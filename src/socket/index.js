@@ -1,5 +1,5 @@
 import SocketServer from 'socket.io'
-import { PLAYER_IN_MENU } from '../game/constants/states'
+import { USER_IN_MENU } from '../game/constants/states'
 import { parseCommand } from '../game/utils'
 import setAppstate from '../game/utils/set-appstate'
 
@@ -12,11 +12,10 @@ export default (server) => {
     users[socket.id] = {
       id: socket.id,
       displayName: '',
-      character: {},
       room: '',
-      state: PLAYER_IN_MENU,
+      state: USER_IN_MENU,
     }
-    setAppstate(PLAYER_IN_MENU, socket, io, { user: users[socket.id] })
+    setAppstate(USER_IN_MENU, socket, io, { user: users[socket.id] })
     socket.on('command', (payload) => {
       const user = users[socket.id]
       parseCommand({

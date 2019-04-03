@@ -1,6 +1,6 @@
 import hasValidOptions from './has-valid-options'
 import commands from '../commands'
-import { PLAYER_WAITING } from '../constants/states'
+import { USER_WAITING } from '../constants/states'
 import { PLAYER_CAP } from '../constants/numbers'
 
 
@@ -11,7 +11,7 @@ export default (props) => {
   const command = category && category[payload.command]
     ? category[payload.command] : commands.general[payload.command]
 
-  if (user.state === PLAYER_WAITING) {
+  if (user.state === USER_WAITING) {
     io
       .to(socket.id)
       .emit(
@@ -21,9 +21,15 @@ export default (props) => {
   } else if (command) {
     const optionsValid = hasValidOptions(command, payload)
     if (optionsValid.valid) {
-      command(props)
+      if (!command.player_state
+        || user.player_state === command.player_state) {
+        command(props)
+      } else {
+        io.to(socket.id).emit('error', { output: 'Can\'t do this right now' })
+      }
+    } else {
+      io.to(socket.id).emit('error', { output: optionsValid.msg })
     }
-    io.to(socket.id).emit('error', { output: optionsValid.msg })
   } else {
     io
       .to(socket.id)
