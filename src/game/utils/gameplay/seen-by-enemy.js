@@ -1,0 +1,4 @@
+/*
+  check if this player is on a tile visible to another player
+  return list of ids and cardinal direction of this player relative to others
+*/

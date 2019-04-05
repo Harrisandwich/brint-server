@@ -12,7 +12,7 @@ import {
 } from '../../constants/states'
 
 
-const join = ({ payload, socket, io, user, rooms }) => {
+const join = ({ payload, socket, io, user, users, rooms }) => {
   const resp = {}
   const displayName = payload.options.find(o => o.option === 'as').values[0]
   let roomCode = ''
@@ -53,6 +53,7 @@ const join = ({ payload, socket, io, user, rooms }) => {
       name: 'fist',
       range: 1,
       accuracy: 100,
+      damage: 10,
     }]
     user.armour = 0
     user.helmet = 0
@@ -61,6 +62,20 @@ const join = ({ payload, socket, io, user, rooms }) => {
     user.speed = 1000
     user.player_state = STOPPED
     user.pos = { ...spawnPos }
+    user.view_dist = 3
+    user.scope = 1
+    user.health = 100
+
+    const dummy = {
+      id: 'dumdum',
+      room: roomCode,
+      heath: 100,
+      pos: {
+        x: spawnPos.x + 2,
+        y: spawnPos.y - 2,
+      },
+    }
+    users.dummy = dummy
 
     resp.output = `You have successully joined room ${roomCode}`
     io.to(socket.id).emit('command-response', resp)
