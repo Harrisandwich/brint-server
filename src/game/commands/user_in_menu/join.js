@@ -2,6 +2,7 @@ import { find } from 'lodash'
 import randomstring from 'randomstring'
 import setAppstate from '../../utils/set-appstate'
 import { generateMap } from '../../utils/generate'
+import { getPlayerVisRange } from '../../utils/gameplay'
 import { PLAYER_CAP, MAP_SIZE } from '../../constants/numbers'
 import {
   USER_PLAYING,
@@ -70,12 +71,17 @@ const join = ({ payload, socket, io, user, users, rooms }) => {
       id: 'dumdum',
       room: roomCode,
       heath: 100,
+      view_dist: 3,
+      scope: 1,
       pos: {
         x: spawnPos.x + 2,
         y: spawnPos.y - 2,
       },
     }
     users.dummy = dummy
+    const players = Object.values(users).filter(u => u.room === roomCode)
+    user.visible_tiles = getPlayerVisRange(user, thisRoom.map, players).visible_tiles
+    dummy.visible_tiles = getPlayerVisRange(dummy, thisRoom.map, players).visible_tiles
 
     resp.output = `You have successully joined room ${roomCode}`
     io.to(socket.id).emit('command-response', resp)

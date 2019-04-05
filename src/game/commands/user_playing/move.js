@@ -1,11 +1,11 @@
 import { DIR, MAP_SIZE } from '../../constants/numbers'
 import { STOPPED, MOVING } from '../../constants/states'
-import { getPlayerVisRange } from '../../utils/gameplay'
+import { getPlayerVisRange, seenByEnemy, canSeeEnemy } from '../../utils/gameplay'
 
 
 const move = ({ payload, socket, io, user, rooms, users }) => {
   const room = rooms[user.room]
-  const players = Object.values(users).filter(u => u.room === user.room)
+  const players = Object.values(users).filter(u => u.room === user.room && u.id !== user.id)
   const dir = payload.options.find(o => o.option === 'dir').values[0]
   const dist = payload.options.find(o => o.option === 'dist').values[0]
   const direction = DIR[dir]
@@ -29,9 +29,20 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
       user.visible_tiles = visible_tiles
 
       // Check if other players are visible
+      const canSee = canSeeEnemy(user, players)
       // if so, notify
+      if (canSee) {
+        canSee.forEach((p) => {
+          io.to(socket.id).emit('notification', { msg: `You see another player to the ${p.dir}` })
+        })
+      }
+
       // Check if visible to other players
+      const visibleTo = seenByEnemy(user, players)
       // if so, notify other players
+      if (visibleTo) {
+        io.to(socket.id).emit('notification', { msg: 'You are visible to someone' })
+      }
 
       io.to(socket.id)
         .emit(
@@ -44,10 +55,21 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
       user.visible_tiles = visible_tiles
 
       // Check if other players are visible
+      const canSee = canSeeEnemy(user, players)
       // if so, notify
+      if (canSee) {
+        canSee.forEach((p) => {
+          io
+            .to(socket.id)
+            .emit('notification', { msg: `You see another player to the ${p.dir.key}` })
+        })
+      }
       // Check if visible to other players
+      const visibleTo = seenByEnemy(user, players)
       // if so, notify other players
-
+      if (visibleTo) {
+        io.to(socket.id).emit('notification', { msg: 'You are visible to someone' })
+      }
       io.to(socket.id)
         .emit(
           'notification',
