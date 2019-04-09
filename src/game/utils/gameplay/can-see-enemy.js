@@ -1,3 +1,4 @@
+import { distance } from 'mathjs'
 import { DIR } from '../../constants/numbers'
 
 /*
@@ -13,6 +14,7 @@ export default (user, players) => {
     const visible = visible_tiles.filter(tile => tile.x === pos.x && tile.y === pos.y)
     if (visible) {
       const dir = { x: 0, y: -1 }
+      const dist = Math.round(distance([user.pos.x, user.pos.y], [pos.x, pos.y]))
 
       if (pos.x > user.pos.x) {
         dir.x = 1
@@ -38,7 +40,9 @@ export default (user, players) => {
 
       can_see.push({
         id: p.id,
+        displayName: p.displayName,
         dir,
+        dist,
       })
     }
   })

@@ -53,7 +53,7 @@ const join = ({ payload, socket, io, user, users, rooms }) => {
     user.inventory = [{
       name: 'fist',
       range: 1,
-      accuracy: 100,
+      accuracy: 1,
       damage: 10,
     }]
     user.armour = 0
@@ -69,19 +69,35 @@ const join = ({ payload, socket, io, user, users, rooms }) => {
 
     const dummy = {
       id: 'dumdum',
+      displayName: 'Dumboi69',
       room: roomCode,
       heath: 100,
       view_dist: 3,
       scope: 1,
       pos: {
-        x: spawnPos.x + 2,
+        x: spawnPos.x + 1,
+        y: spawnPos.y - 1,
+      },
+    }
+    const dummy2 = {
+      id: 'dimsum',
+      displayName: 'StupidHead46',
+      room: roomCode,
+      heath: 100,
+      view_dist: 3,
+      scope: 1,
+      pos: {
+        x: spawnPos.x,
         y: spawnPos.y - 2,
       },
     }
+
     users.dummy = dummy
+    users.dummy2 = dummy2
     const players = Object.values(users).filter(u => u.room === roomCode)
     user.visible_tiles = getPlayerVisRange(user, thisRoom.map, players).visible_tiles
     dummy.visible_tiles = getPlayerVisRange(dummy, thisRoom.map, players).visible_tiles
+    dummy2.visible_tiles = getPlayerVisRange(dummy, thisRoom.map, players).visible_tiles
 
     resp.output = `You have successully joined room ${roomCode}`
     io.to(socket.id).emit('command-response', resp)

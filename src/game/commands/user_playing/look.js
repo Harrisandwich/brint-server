@@ -17,6 +17,7 @@ const look = ({ socket, io, user, users, rooms }) => {
 
 
 look.str = '/look'
+look.short = 'lk'
 look.player_state = STOPPED
 look.options = []
 // eslint-disable-next-line

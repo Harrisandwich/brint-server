@@ -1,5 +1,6 @@
 export const PLAYER_CAP = 1
 export const MAP_SIZE = 30
+export const VOICE_DISTANCE = 10
 export const DIR = {
   n: { x: 0, y: -1 },
   ne: { x: 1, y: -1 },

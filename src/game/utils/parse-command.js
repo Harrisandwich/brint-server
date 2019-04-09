@@ -8,9 +8,10 @@ export default (props) => {
   const { payload, user, socket, io, rooms } = props
   const thisRoom = rooms[user.room]
   const category = commands[user.state]
-  const command = category && category[payload.command]
-    ? category[payload.command] : commands.general[payload.command]
-
+  const commandKey = Object.keys(category)
+    .find(cmd => cmd === payload.command
+        || category[cmd].short === payload.command)
+  const command = category[commandKey]
   if (user.state === USER_WAITING) {
     io
       .to(socket.id)

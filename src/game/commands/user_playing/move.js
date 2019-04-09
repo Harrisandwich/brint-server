@@ -6,8 +6,8 @@ import { getPlayerVisRange, seenByEnemy, canSeeEnemy } from '../../utils/gamepla
 const move = ({ payload, socket, io, user, rooms, users }) => {
   const room = rooms[user.room]
   const players = Object.values(users).filter(u => u.room === user.room && u.id !== user.id)
-  const dir = payload.options.find(o => o.option === 'dir').values[0]
-  const dist = payload.options.find(o => o.option === 'dist').values[0]
+  const dir = payload.options.find(o => o.option === 'dir' || o.option === 'dr').values[0]
+  const dist = payload.options.find(o => o.option === 'dist' || o.option === 'dst').values[0]
   const direction = DIR[dir]
   let moveCounter = 0
   user.player_state = MOVING
@@ -28,22 +28,6 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
       const { visible_tiles } = getPlayerVisRange(user, room.map, players)
       user.visible_tiles = visible_tiles
 
-      // Check if other players are visible
-      const canSee = canSeeEnemy(user, players)
-      // if so, notify
-      if (canSee) {
-        canSee.forEach((p) => {
-          io.to(socket.id).emit('notification', { msg: `You see another player to the ${p.dir}` })
-        })
-      }
-
-      // Check if visible to other players
-      const visibleTo = seenByEnemy(user, players)
-      // if so, notify other players
-      if (visibleTo) {
-        io.to(socket.id).emit('notification', { msg: 'You are visible to someone' })
-      }
-
       io.to(socket.id)
         .emit(
           'notification',
@@ -53,37 +37,12 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
       user.pos = newPos
       const { visible_tiles } = getPlayerVisRange(user, room.map, players)
       user.visible_tiles = visible_tiles
-
-      // Check if other players are visible
-      const canSee = canSeeEnemy(user, players)
-      // if so, notify
-      if (canSee) {
-        canSee.forEach((p) => {
-          io
-            .to(socket.id)
-            .emit('notification', { msg: `You see another player to the ${p.dir.key}` })
-        })
-      }
-      // Check if visible to other players
-      const visibleTo = seenByEnemy(user, players)
-      // if so, notify other players
-      if (visibleTo) {
-        io.to(socket.id).emit('notification', { msg: 'You are visible to someone' })
-      }
       io.to(socket.id)
         .emit(
           'notification',
           { msg: `You moved one tile. (${oldPos.x}, ${oldPos.y}) to (${newPos.x}, ${newPos.y})` },
         )
-      // check for other players within visible area
-      /*
-          get top left of vision
-          get max visible rows
-          get max visible columns
-          loop through users in this room
-          if user pos matches a visible tile
-          notify the user
-      */
+
       moveCounter += 1
       if (moveCounter === dist) {
         clearInterval(user.moveTimer)
@@ -96,19 +55,47 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
           )
       }
     }
+    // Check if other players are visible
+    const canSee = canSeeEnemy(user, players)
+    // if so, notify
+    if (canSee) {
+      canSee.forEach((p) => {
+        io
+          .to(socket.id)
+          .emit(
+            'notification',
+            { msg: `You see another player to the ${p.dir.key}. ${p.dist} tiles away` },
+          )
+      })
+    }
+    // Check if visible to other players
+    const visibleTo = seenByEnemy(user, players)
+    // if so, notify other players
+    if (visibleTo) {
+      visibleTo.forEach((p) => {
+        io.to(p.id)
+          .emit(
+            'notification',
+            { msg: `You see another player to the ${p.dir.key}. ${p.dist} tiles away` },
+          )
+      })
+    }
   }, user.speed)
 }
 
 
 move.str = '/move'
+move.short = 'mv'
 move.player_state = STOPPED
 move.options = [{
   name: 'dir',
+  short: 'dr',
   type: 'string',
   desc: 'The cardinal direction to move in. n/ne/e/se/s/sw/w/nw',
   required: true,
 }, {
   name: 'dist',
+  short: 'dst',
   type: 'number',
   desc: 'The number of tiles you want to travel',
   required: true,
