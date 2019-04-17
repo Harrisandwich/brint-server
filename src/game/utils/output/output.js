@@ -1,11 +1,11 @@
 class Output {
-  constructor(startStr) {
-    this.str = startStr || ''
+  constructor() {
+    this.str = []
   }
 
   newLines(num) {
     for (let i = 0; i < num; i++) {
-      this.str += '\n'
+      this.str.push('\n')
     }
   }
 
@@ -19,7 +19,7 @@ class Output {
     }
 
     if (str) {
-      this.str += str
+      this.str.push(str)
     }
 
     if (underline) {
@@ -34,10 +34,11 @@ class Output {
   }
 
   underline(length) {
-    this.str += '\n'
+    let line = ''
     for (let i = 0; i < length; i++) {
-      this.str += '='
+      line += '='
     }
+    this.str.push(line)
   }
 }
 

@@ -11,7 +11,7 @@ const look = ({ socket, io, user, users, rooms }) => {
   io.to(socket.id)
     .emit(
       'notification',
-      { msg: grid },
+      { output: grid },
     )
 }
 

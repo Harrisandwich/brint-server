@@ -31,7 +31,7 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
       io.to(socket.id)
         .emit(
           'notification',
-          { msg: `Map edge reached. Current Position: (${user.pos.x}, ${user.pos.y})` },
+          { output: `Map edge reached. Current Position: (${user.pos.x}, ${user.pos.y})` },
         )
     } else {
       user.pos = newPos
@@ -40,7 +40,8 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
       io.to(socket.id)
         .emit(
           'notification',
-          { msg: `You moved one tile. (${oldPos.x}, ${oldPos.y}) to (${newPos.x}, ${newPos.y})` },
+          // eslint-disable-next-line max-len
+          { output: `You moved one tile. (${oldPos.x}, ${oldPos.y}) to (${newPos.x}, ${newPos.y})` },
         )
 
       moveCounter += 1
@@ -51,7 +52,7 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
         io.to(socket.id)
           .emit(
             'notification',
-            { msg: `Move complete. Current Position: (${user.pos.x}, ${user.pos.y})` },
+            { output: `Move complete. Current Position: (${user.pos.x}, ${user.pos.y})` },
           )
       }
     }
@@ -64,7 +65,7 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
           .to(socket.id)
           .emit(
             'notification',
-            { msg: `You see another player to the ${p.dir.key}. ${p.dist} tiles away` },
+            { output: `You see another player to the ${p.dir.key}. ${p.dist} tiles away` },
           )
       })
     }
@@ -76,7 +77,7 @@ const move = ({ payload, socket, io, user, rooms, users }) => {
         io.to(p.id)
           .emit(
             'notification',
-            { msg: `You see another player to the ${p.dir.key}. ${p.dist} tiles away` },
+            { output: `You see another player to the ${p.dir.key}. ${p.dist} tiles away` },
           )
       })
     }

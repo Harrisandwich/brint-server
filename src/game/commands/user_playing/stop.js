@@ -8,7 +8,7 @@ const stop = ({ socket, io, user }) => {
   io.to(socket.id)
     .emit(
       'notification',
-      { msg: `Stopped. Current Position: (${user.pos.x}, ${user.pos.y})` },
+      { output: `Stopped. Current Position: (${user.pos.x}, ${user.pos.y})` },
     )
 }
 

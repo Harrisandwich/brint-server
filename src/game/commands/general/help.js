@@ -47,8 +47,7 @@ const help = ({ payload, socket, io, user }) => {
       output.addLine(`${cmd.str}: ${cmd.desc}`)
       cmd.options.forEach((op) => {
         if (op.required) {
-          output.addLine(`  * ${op.name} - ${op.desc}`)
-          output.addLine(`    - takes: ${op.type}`)
+          output.addLine(`  * -${op.name}: ${op.desc}, takes: ${op.type}`)
         }
       })
     }

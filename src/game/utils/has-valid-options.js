@@ -2,7 +2,7 @@
 export default (command, payload) => {
   const result = {
     valid: true,
-    msg: '',
+    output: '',
   }
 
   command.options.forEach((option) => {

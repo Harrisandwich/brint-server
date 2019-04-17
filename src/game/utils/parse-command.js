@@ -7,7 +7,7 @@ import { PLAYER_CAP } from '../constants/numbers'
 export default (props) => {
   const { payload, user, socket, io, rooms } = props
   const thisRoom = rooms[user.room]
-  const category = commands[user.state]
+  const category = { ...commands[user.state], ...commands.general }
   const commandKey = Object.keys(category)
     .find(cmd => cmd === payload.command
         || category[cmd].short === payload.command)
@@ -17,7 +17,7 @@ export default (props) => {
       .to(socket.id)
       .emit(
         'notification',
-        { msg: `Currently waiting for players: ${thisRoom.players}/${PLAYER_CAP}` },
+        { output: `Currently waiting for players: ${thisRoom.players}/${PLAYER_CAP}` },
       )
   } else if (command) {
     const optionsValid = hasValidOptions(command, payload)

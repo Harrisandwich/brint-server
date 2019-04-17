@@ -111,7 +111,7 @@ const join = ({ payload, socket, io, user, users, rooms }) => {
       io.to(`${roomCode}`)
         .emit(
           'notification',
-          { msg: `Waiting for players: ${thisRoom.players}/${PLAYER_CAP}` },
+          { output: `Waiting for players: ${thisRoom.players}/${PLAYER_CAP}` },
         )
     } else if (thisRoom.state === GAME_IN_PROGRESS) {
       setAppstate(USER_PLAYING, socket, io, {
@@ -122,7 +122,7 @@ const join = ({ payload, socket, io, user, users, rooms }) => {
       io.to(`${roomCode}`)
         .emit(
           'notification',
-          { msg: 'Let the battle begin!' },
+          { output: 'Let the battle begin!' },
         )
     }
   })

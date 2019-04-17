@@ -1,6 +1,6 @@
 export default (user, map, players) => {
   const visible_tiles = []
-  let grid = ''
+  const grid = []
   let vis_range = (user.view_dist * user.scope)
   if (vis_range % 2 === 0) {
     vis_range += 1
@@ -19,10 +19,12 @@ export default (user, map, players) => {
   }
 
   for (let r = tl.y; r <= br.y; r++) {
+    let row = ''
+    let lineRow = ''
     for (let l = tl.x; l <= tr.x; l++) {
-      grid += '--'
+      lineRow += '----'
     }
-    grid += '\n'
+    grid.push(lineRow)
     for (let c = tl.x; c <= tr.x; c++) {
       const tile_data = map[r][c]
       visible_tiles.push({
@@ -34,17 +36,17 @@ export default (user, map, players) => {
         && p.pos.y === r
         && p.id !== user.id)
       if (c === user.pos.x && r === user.pos.y) {
-        grid += '|x'
+        row += '| x '
       } else if (tile_data.loot.length > 0) {
-        grid += '|*'
+        row += '| * '
       } else if (playerHere) {
-        grid += '|p'
+        row += '| p '
       } else {
-        grid += '| '
+        row += '| _ '
       }
     }
-    grid += '|'
-    grid += '\n'
+    row += '|'
+    grid.push(row)
   }
   return {
     visible_tiles,

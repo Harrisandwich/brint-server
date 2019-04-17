@@ -18,12 +18,12 @@ const attack = ({ socket, io, user, users }) => {
       io.to(socket.id)
         .emit(
           'notification',
-          { msg: `You hit ${target.displayName} with your ${equipped.name} for ${equipped.damage}!` },
+          { output: `You hit ${target.displayName} with your ${equipped.name} for ${equipped.damage}!` },
         )
       io.to(target.id)
         .emit(
           'notification',
-          { msg: `You were hit by ${user.displayName}'s ${equipped.name} and tooke ${equipped.damage}!` },
+          { output: `You were hit by ${user.displayName}'s ${equipped.name} and tooke ${equipped.damage}!` },
         )
     }
   }
