@@ -1,0 +1,5 @@
+export default {
+  APPSTATE: 'APPSTATE',
+  NOTIFICATION: 'NOTIFICATION',
+  ERROR: 'ERROR',
+}

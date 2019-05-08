@@ -1,6 +1,6 @@
 import { find } from 'lodash'
 import randomstring from 'randomstring'
-import setAppstate from '../../utils/set-appstate'
+import setAppstate from '../../utils/get-prompt'
 import { generateMap } from '../../utils/generate'
 import { getPlayerVisRange } from '../../utils/gameplay'
 import { PLAYER_CAP, MAP_SIZE } from '../../constants/numbers'

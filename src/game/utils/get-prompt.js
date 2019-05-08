@@ -6,19 +6,18 @@ import {
 } from '../constants/states'
 
 
-export default (state, socket, io, props) => {
-  const { user } = props
-  user.state = state
+export default (user) => {
+  const { displayName, room } = user
   let prompt = 'Main Menu: '
-  switch (state) {
+  switch (user.state) {
     case USER_IN_MENU:
       prompt = 'Main Menu: '
       break
     case USER_WAITING:
-      prompt = `${props.displayName}-${props.roomCode}: `
+      prompt = `${displayName}-${room}: `
       break
     case USER_PLAYING:
-      prompt = `${props.displayName}-${props.roomCode}: `
+      prompt = `${displayName}-${room}: `
       break
     case USER_GAME_OVER:
       prompt = 'GAME OVER'
@@ -26,8 +25,5 @@ export default (state, socket, io, props) => {
     default:
       prompt = 'Main Menu: '
   }
-  io.to(socket.id).emit('set-appstate', {
-    prompt,
-    state,
-  })
+  return prompt
 }
